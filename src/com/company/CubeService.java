@@ -54,6 +54,4 @@ public interface CubeService {
         }
         return a;
     }
-
-    int randomCubic();
 }

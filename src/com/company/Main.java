@@ -26,102 +26,104 @@ public class Main {
         List<Integer> numberGuessedByTheComputer = new ArrayList<>();
         List<Integer> randomDieComputerNumber = new ArrayList<>();
         List<Integer> randomDieUserNumber = new ArrayList<>();
-        List<Integer> customGlasses = new ArrayList<>();
-        List<Integer> computerGlasses = new ArrayList<>();
+        List<Integer> scoreOfUser = new ArrayList<>();
+        List<Integer> scoreOfComputer = new ArrayList<>();
 
 
-        CubeService cubicServic = new User();
-        CubeService cubicServic1 = new Computer();
-        int wer = 2;
-        int x = 0;
+        CubeService cubeService = new User();
+        CubeService cubeService1 = new Computer();
+        int counter1 = 2;
+        int round = 0;
         System.out.println("---       Strat game       ---");
         do {
             System.out.println();
             System.out.print("Predict amount of points (2..12) : ");
-            int sum = scanner.nextInt(); //7
+            int guessNumberUser = scanner.nextInt(); //7
             System.out.println("""
                     
                     Cheating - 1
-                    Not cheating - 2""");
-            int num = scanner.nextInt(); //1
-            int s = cubicServic.randomCubic();
-            boolean minus = true;
-            if (num == 1) {
-               int chance = random.nextInt(1,  wer + 1);
-               int chance1 = random.nextInt(1, wer + 1);
-                minus = false;
-                System.out.println(chance + " - " + chance1 + " " + wer);
+                    Not to cheating - 2""");
+            int toCheatOrNotToCheat = scanner.nextInt(); //1
+            int randomUserDie = cubeService.randomCube();
+            boolean guessedOrNotGuessed = true;
+            if (toCheatOrNotToCheat == 1) {
+               int chance = random.nextInt(1,  counter1 + 1);
+               int chance1 = random.nextInt(1, counter1 + 1);
+                guessedOrNotGuessed = false;
+                //First 1 chance out of 2 (50% to 50%) Round 2 1 chance out of 4 (one to 4) Round 3 1 chance out of 6 (one out of six)
+                System.out.println("Two random numbers matched or not? " + chance + " = " + chance1);
                 if (chance == chance1) {
-                    s = sum;
-                    minus = true;
+                    randomUserDie = guessNumberUser;
+                    guessedOrNotGuessed = true;
                 }
             }
-            numberGuessedByUsers.add(sum);
+            numberGuessedByUsers.add(guessNumberUser);
             System.out.println("\nUser rolls the dices...");
-            randomDieUserNumber.add(s);
-            int b = s - (Math.abs(s - sum) * 2);
-            int ret = 0;
-            if (!minus) {
-                ret = b - 10;
+            randomDieUserNumber.add(randomUserDie);
+            int scoreUser = randomUserDie - (Math.abs(randomUserDie - guessNumberUser) * 2);
+            int overwriteUserScore;
+            if (!guessedOrNotGuessed) {
+                System.out.println("NotToCheat - 10 points ");
+                overwriteUserScore = scoreUser - 10;
             } else {
-                ret = b;
+                overwriteUserScore = scoreUser;
             }
-            customGlasses.add(ret);
-            int v = random.nextInt(2, 13);
-            numberGuessedByTheComputer.add(v);
+            scoreOfUser.add(overwriteUserScore);
+            int guessNumberComputer = random.nextInt(2, 13);
+            numberGuessedByTheComputer.add(guessNumberComputer);
             System.out.printf("""
                     On the dice fell %d points
                     Result is %d - abs(%d - %d) * 2: %d
                                 
                     Sopernik predicted %d points
                     Sopernik rolls the dices
-                    """, s, s, s, sum, ret, v);
-            int m = cubicServic1.randomCubic();
-            if (!minus) {
-                int cheating = random.nextInt(1, wer + 1);
-                int yesChi = random.nextInt(1, wer + 1);
-                System.out.println(cheating + " - " + yesChi + " " + wer);
-                if (cheating == yesChi) {
-                    m = v;
+                    """, randomUserDie, randomUserDie, randomUserDie, guessNumberUser, overwriteUserScore, guessNumberComputer);
+            int randomComputerDie = cubeService1.randomCube();
+            if (!guessedOrNotGuessed) {
+                int chance = random.nextInt(1,  counter1 + 1);
+                int chance1 = random.nextInt(1, counter1 + 1);
+                System.out.println("Two random numbers matched or not? " + chance + " - " + chance1);
+                if (chance == chance1) {
+                    randomComputerDie = guessNumberComputer;
                 }
             }
-            randomDieComputerNumber.add(m);
-            int k = m - (Math.abs(m - v) * 2);
-            computerGlasses.add(k);
+            randomDieComputerNumber.add(randomComputerDie);
+            int scoreComputer = randomComputerDie - (Math.abs(randomComputerDie - guessNumberComputer) * 2);
+            scoreOfComputer.add(scoreComputer);
             System.out.printf("""
                     On the dice fell %d points
-                    Result is %d - abs(%d - %d) * 2: %d""", m, m, m, v, k);
-            if (b > k) {
-                int d = b - k;
+                    Result is %d - abs(%d - %d) * 2: %d""", randomComputerDie, randomComputerDie, randomComputerDie, guessNumberComputer, scoreComputer);
+            if (scoreUser > scoreComputer) {
+                int score = scoreUser - scoreComputer;
                 System.out.printf("""
                                                 
                         Users win %d points more
                         Congratulations!
-                        """, d);
+                        """, score);
             } else {
-                int g = k - b;
+                int score = scoreComputer - scoreUser;
                 System.out.printf("""
                                                 
                         Sopernik win %d points more
                         Congratulations!
                                                 
-                        """, g);
+                        """, score);
             }
-            int y = Math.abs(k - b);
+            int currentScore = Math.abs(scoreComputer - scoreUser);
             System.out.printf("""
                     ---------- Current score ----------
                     User       %d points
                     Sopernik   %d points
-                    """, b, k);
-            if (b > k) {
+                    """, scoreUser, scoreComputer);
+            if (scoreUser > scoreComputer) {
                 System.out.printf("""
                                                 
                         Users is ahead by %d points!
-                        -----------------------------------""", y);
+                        -----------------------------------""", currentScore);
             }
-            x++;
-            wer += 2;
-        } while (x < 3);
+            round++;
+            counter1 += 2;
+        } while (round < 3);
         System.out.println("""
                                 
                 -------------- Finish game --------------
@@ -137,24 +139,24 @@ public class Main {
                                    | Result      %d  | Result     %d
                             -------+-----------------+----------------
                             """, numberGuessedByUsers.get(i), numberGuessedByTheComputer.get(i),
-                    counter, myNumUser.get(i), numSopernik.get(i), pointsUser.get(i), pointsSopernik.get(i));
+                    counter, randomDieUserNumber.get(i), randomDieComputerNumber.get(i), scoreOfUser.get(i), scoreOfComputer.get(i));
         }
         int corzinaUser = 0;
         int corzinaSopernik = 0;
         for (int i = 0; i < 3; i++) {
-            corzinaUser += pointsUser.get(i);
-            corzinaSopernik += pointsSopernik.get(i);
+            corzinaUser += scoreOfUser.get(i);
+            corzinaSopernik += scoreOfComputer.get(i);
         }
         System.out.printf("""
                 Total  | Points      %d | Points      %d
                 """, corzinaUser, corzinaSopernik);
-        int j = Math.abs(corzinaSopernik - corzinaUser);
+        int totalPoints = Math.abs(corzinaSopernik - corzinaUser);
         if (corzinaUser > corzinaSopernik) {
             System.out.printf("""
-                    Users win %d points more. Congratulations!""", j);
+                    Users win %d points more. Congratulations!""", totalPoints);
         } else {
             System.out.printf("""
-                    Sopernik win %d points more. Congratulations!""", j);
+                    Sopernik win %d points more. Congratulations!""", totalPoints);
         }
         System.out.println("""
                                 
