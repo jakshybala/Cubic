@@ -6,75 +6,105 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+    static Random random = new Random();
     static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
         game();
     }
 
-    public static void gameM() {
-        int vybor = scanner.nextInt();
-        switch (vybor) {
+    public static void newGames() {
+        int newGame = scanner.nextInt();
+        switch (newGame) {
             case 1 -> game();
-            case 2 -> System.out.println("Not game");
+            case 2 -> System.out.println("Game over");
         }
-
     }
 
     public static void game() {
-        List<Integer> myNumUser = new ArrayList<>();
-        List<Integer> predictedSopernik = new ArrayList<>();
-        List<Integer> randomUser = new ArrayList<>();
-        List<Integer> numSopernik = new ArrayList<>();
-        List<Integer> pointsUser = new ArrayList<>();
-        List<Integer> pointsSopernik = new ArrayList<>();
+        List<Integer> numberGuessedByUsers = new ArrayList<>();
+        List<Integer> numberGuessedByTheComputer = new ArrayList<>();
+        List<Integer> randomDieComputerNumber = new ArrayList<>();
+        List<Integer> randomDieUserNumber = new ArrayList<>();
+        List<Integer> customGlasses = new ArrayList<>();
+        List<Integer> computerGlasses = new ArrayList<>();
 
 
-        Random random = new Random();
-        CubicServic cubicServic = new Cubic();
-        CubicServic cubicServic1 = new Sopernik();
-
+        CubeService cubicServic = new User();
+        CubeService cubicServic1 = new Computer();
+        int wer = 2;
         int x = 0;
         System.out.println("---       Strat game       ---");
         do {
             System.out.println();
             System.out.print("Predict amount of points (2..12) : ");
-            int num = scanner.nextInt();
-            myNumUser.add(num);
-            System.out.println("\nUser rolls the dices...");
+            int sum = scanner.nextInt(); //7
+            System.out.println("""
+                    
+                    Cheating - 1
+                    Not cheating - 2""");
+            int num = scanner.nextInt(); //1
             int s = cubicServic.randomCubic();
-            randomUser.add(s);
-            int b = s - (Math.abs(s - num) * 2);
-            pointsUser.add(b);
+            boolean minus = true;
+            if (num == 1) {
+               int chance = random.nextInt(1,  wer + 1);
+               int chance1 = random.nextInt(1, wer + 1);
+                minus = false;
+                System.out.println(chance + " - " + chance1 + " " + wer);
+                if (chance == chance1) {
+                    s = sum;
+                    minus = true;
+                }
+            }
+            numberGuessedByUsers.add(sum);
+            System.out.println("\nUser rolls the dices...");
+            randomDieUserNumber.add(s);
+            int b = s - (Math.abs(s - sum) * 2);
+            int ret = 0;
+            if (!minus) {
+                ret = b - 10;
+            } else {
+                ret = b;
+            }
+            customGlasses.add(ret);
             int v = random.nextInt(2, 13);
-            numSopernik.add(v);
+            numberGuessedByTheComputer.add(v);
             System.out.printf("""
                     On the dice fell %d points
                     Result is %d - abs(%d - %d) * 2: %d
                                 
                     Sopernik predicted %d points
                     Sopernik rolls the dices
-                    """, s, s, s, num, b, v);
+                    """, s, s, s, sum, ret, v);
             int m = cubicServic1.randomCubic();
-            predictedSopernik.add(m);
+            if (!minus) {
+                int cheating = random.nextInt(1, wer + 1);
+                int yesChi = random.nextInt(1, wer + 1);
+                System.out.println(cheating + " - " + yesChi + " " + wer);
+                if (cheating == yesChi) {
+                    m = v;
+                }
+            }
+            randomDieComputerNumber.add(m);
             int k = m - (Math.abs(m - v) * 2);
-            pointsSopernik.add(k);
+            computerGlasses.add(k);
             System.out.printf("""
                     On the dice fell %d points
                     Result is %d - abs(%d - %d) * 2: %d""", m, m, m, v, k);
             if (b > k) {
                 int d = b - k;
                 System.out.printf("""
-                        
+                                                
                         Users win %d points more
                         Congratulations!
                         """, d);
             } else {
                 int g = k - b;
                 System.out.printf("""
-                        
+                                                
                         Sopernik win %d points more
                         Congratulations!
-                        
+                                                
                         """, g);
             }
             int y = Math.abs(k - b);
@@ -85,28 +115,29 @@ public class Main {
                     """, b, k);
             if (b > k) {
                 System.out.printf("""
-                        
+                                                
                         Users is ahead by %d points!
                         -----------------------------------""", y);
             }
             x++;
+            wer += 2;
         } while (x < 3);
         System.out.println("""
-                
+                                
                 -------------- Finish game --------------
-                
+                                
                  Round |         User   |    Sopernik
                 -------+----------------+----------------""");
-        int count = 0;
+        int counter = 0;
         for (int i = 0; i < 3; i++) {
-            count++;
+            counter++;
             System.out.printf("""
-                           | Predicted   %d  | Predicted  %d
-                    - %d -  | Dice        %d  | Dice       %d
-                           | Result      %d  | Result     %d
-                    -------+----------------+----------------
-                    """, randomUser.get(i), predictedSopernik.get(i),
-                    count, myNumUser.get(i), numSopernik.get(i), pointsUser.get(i), pointsSopernik.get(i));
+                                   | Predicted   %d  | Predicted  %d
+                            - %d -  | Dice        %d  | Dice       %d
+                                   | Result      %d  | Result     %d
+                            -------+-----------------+----------------
+                            """, numberGuessedByUsers.get(i), numberGuessedByTheComputer.get(i),
+                    counter, myNumUser.get(i), numSopernik.get(i), pointsUser.get(i), pointsSopernik.get(i));
         }
         int corzinaUser = 0;
         int corzinaSopernik = 0;
@@ -126,10 +157,10 @@ public class Main {
                     Sopernik win %d points more. Congratulations!""", j);
         }
         System.out.println("""
-                
-                Cotinium game?
+                                
+                Continue game?
                 yes - 1
                 not - 2""");
-        gameM();
+        newGames();
     }
 }

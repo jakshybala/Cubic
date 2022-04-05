@@ -2,11 +2,11 @@ package com.company;
 
 import java.util.Random;
 
-public interface CubicServic {
+public interface CubeService {
 
     Random random = new Random();
 
-    default int randomCubic() {
+    default int randomCube() {
         int a = random.nextInt(1, 7);
         switch (a) {
             case 1 -> System.out.println("""
@@ -54,4 +54,6 @@ public interface CubicServic {
         }
         return a;
     }
+
+    int randomCubic();
 }
