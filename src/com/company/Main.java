@@ -34,7 +34,7 @@ public class Main {
         CubeService cubeService1 = new Computer();
         int counter1 = 2;
         int round = 0;
-        System.out.println("---       Strat game       ---");
+        System.out.println("---       Start game       ---");
         do {
             System.out.println();
             System.out.print("Predict amount of points (2..12) : ");
@@ -75,8 +75,8 @@ public class Main {
                     On the dice fell %d points
                     Result is %d - abs(%d - %d) * 2: %d
                                 
-                    Sopernik predicted %d points
-                    Sopernik rolls the dices
+                    Computer predicted %d points
+                    Computer rolls the dices
                     """, randomUserDie, randomUserDie, randomUserDie, guessNumberUser, overwriteUserScore, guessNumberComputer);
             int randomComputerDie = cubeService1.randomCube();
             if (!guessedOrNotGuessed) {
@@ -104,7 +104,7 @@ public class Main {
                 int score = scoreComputer - scoreUser;
                 System.out.printf("""
                                                 
-                        Sopernik win %d points more
+                        Computer win %d points more
                         Congratulations!
                                                 
                         """, score);
@@ -113,7 +113,7 @@ public class Main {
             System.out.printf("""
                     ---------- Current score ----------
                     User       %d points
-                    Sopernik   %d points
+                    Computer   %d points
                     """, scoreUser, scoreComputer);
             if (scoreUser > scoreComputer) {
                 System.out.printf("""
@@ -128,7 +128,7 @@ public class Main {
                                 
                 -------------- Finish game --------------
                                 
-                 Round |         User   |    Sopernik
+                 Round |         User   |    Computer
                 -------+----------------+----------------""");
         int counter = 0;
         for (int i = 0; i < 3; i++) {
@@ -156,7 +156,7 @@ public class Main {
                     Users win %d points more. Congratulations!""", totalPoints);
         } else {
             System.out.printf("""
-                    Sopernik win %d points more. Congratulations!""", totalPoints);
+                    Computer win %d points more. Congratulations!""", totalPoints);
         }
         System.out.println("""
                                 
